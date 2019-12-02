@@ -1,0 +1,55 @@
+{% extends 'base/base_tables.html' %}
+{% block titulo_seccion %}Asistencia {{ groupName }}{% endblock %}
+{% block seccion %}
+    <div class="w3-row-padding">
+        <div class="w3-row-padding w3-card-2">
+            
+        </div>
+        <table class="w3-table-all w3-hoverable w3-small" id="id_candidate_table">
+            <tr class="w3-row w3-center">
+                <th class="w3-col l3">
+                    Nombre
+                </th>
+                <th class="w3-col l3">Apellidos
+                </th>
+                <th class="w3-col l2 w3-center">
+                    Inasistencias
+                </th>
+                <th class="w3-col l2 w3-center">
+                    Tardanzas
+                </th>
+                <th class="w3-col l2 w3-center">
+                    Asistencia
+                </th>
+            </tr>
+            <tbody id="id_table_body">
+                {% for student in  groupList %}
+                    <tr>
+                        <td class="w3-col l3">{{ student.student.student.name }}</td>
+                        <td class="w3-col l3">{{ student.student.student.lastname }}</td>
+                        <td class="w3-col l2 w3-center">0</td>
+                        <td class="w3-col l2 w3-center">0</td>
+                        <td class="w3-col l2 w3-center">
+                            <select class="w3-select w3-border w3-round es-shadow">
+                                <option value=0 disable selected>
+                                    Asistencia Manual
+                                </option>
+                                <option value=1>
+                                    Asistencia
+                                </option>
+                                <option value=2>
+                                    Inasistencia
+                                </option>
+                                <option value=3>
+                                    Tardanza
+                                </option>
+                            </select>
+                            
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script></script>
+{% endblock %}
