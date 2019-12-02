@@ -1,4 +1,4 @@
-import sqlite3
+import datetime
 
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect
@@ -448,7 +448,7 @@ def candidateToGroupAjax(request):
         groupList.student = Candidate.objects.get(pk=studentPk)
         groupList.group = GroupInformation.objects.get(pk=groupPk)
         groupList.save()
-    except sqlite3.IntegrityError as e:
+    except:
         pass
 
     response_data = {
@@ -460,14 +460,43 @@ def candidateToGroupAjax(request):
 
 
 def assitence(request, pk):
-    groupList = GroupList.objects.filter(pk=pk)
-    groupName = GroupList.objects.get(pk=pk).group.name
+    groupList = GroupList.objects.filter(group=pk)
+    group = GroupList.objects.get(pk=pk).group
 
     return render(request, "docencia/assistence.html", locals())
 # <> fin assistenceView
 
 @require_POST
 def assistenceCheckAjax(request):
+    groupList = []
+    
+    for group in GroupList.objects.filter(group=request.POST.get("group")):
+        group.inasistencia = GroupList.objects.get(group=request.POST.get("group"), status="i").__len__()
+        groupList.append(group)
+
+    print(groupList)
+
+    response_data = {
+        "groupList": groupList,
+    }
+
+    return JsonResponse(response_data)
+# <> fin assistenceCheckAjax
+
+@require_POST
+def assistenceTakeAjax(request):
+    groupListPk = request.POST.get("groupList")
+    status = request.POST.get("status")
+
+    for assitence in Assistence.objects.filter(grouplist=groupListPk):
+        assitence.delete()
+
+    assistence = Assistence()
+    assistence.grouplist = GroupList.objects.get(pk=groupListPk)
+    assistence.dateTime = datetime.datetime.now()
+    assistence.status = status
+    assistence.save()
+
     response_data = {
         "data": "True",
     }

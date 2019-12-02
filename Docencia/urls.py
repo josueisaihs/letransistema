@@ -44,6 +44,9 @@ urlpatterns = [
     path("candidate/group/list", views.candidateToGroupAjax, name='view_candidate_to_group_select'),
 
     # Asistencia
-    path("grouplist/assistence/<int:pk>", views.assitence, name="view_assistence")
+    path("grouplist/assistence/<int:pk>", views.assitence, 
+    name="view_assistence"),
+    path("grouplist/assistence/change", views.assistenceTakeAjax, name="view_assistence_change"),
+    path("grouplist/assistence/check", views.assistenceCheckAjax, name="view_assitence_check")
 ]
 

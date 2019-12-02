@@ -1,5 +1,5 @@
 {% extends 'base/base_tables.html' %}
-{% block titulo_seccion %}Asistencia {{ groupName }}{% endblock %}
+{% block titulo_seccion %}Asistencia {{ group.name }}{% endblock %}
 {% block seccion %}
     <div class="w3-row-padding">
         <div class="w3-row-padding w3-card-2">
@@ -27,29 +27,65 @@
                     <tr>
                         <td class="w3-col l3">{{ student.student.student.name }}</td>
                         <td class="w3-col l3">{{ student.student.student.lastname }}</td>
-                        <td class="w3-col l2 w3-center">0</td>
-                        <td class="w3-col l2 w3-center">0</td>
-                        <td class="w3-col l2 w3-center">
-                            <select class="w3-select w3-border w3-round es-shadow">
-                                <option value=0 disable selected>
+                        <td class="w3-col l2 w3-center" id="id_student_{{ student.pk }}_inasistencia">0</td>
+                        <td class="w3-col l2 w3-center" id="id_student_{{ student.pk }}_tardanzas">0</td>
+                        <td class="w3-col l2 w3-center" id="id_student_{{ student.pk }}_asistencia">
+                            <select 
+                                class="w3-select w3-border w3-round es-shadow" 
+                                onchange="changeAssistence({{ student.pk }},            this.options[this.selectedIndex].value)">
+                                <option value="0" disable selected>
                                     Asistencia Manual
                                 </option>
-                                <option value=1>
+                                <option value="a">
                                     Asistencia
                                 </option>
-                                <option value=2>
+                                <option value="i">
                                     Inasistencia
                                 </option>
-                                <option value=3>
+                                <option value="t">
                                     Tardanza
                                 </option>
-                            </select>
-                            
+                            </select>                            
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <script></script>
+    <script>
+        //setTimeout(changeCheck, 1000);
+
+        function changeCheck(){
+            $.ajax({
+                url: "{% url 'view_assitence_check' %}",
+                type: "POST",
+                data: {
+                    group: {{ group.pk }}
+                },
+                success: function(json){
+                    console.log("0300 > code >");
+                },
+                error: function(xhr, errmsg, err){
+                    console.log(errmsg, err);
+                }
+            });
+        }
+
+        function changeAssistence(groupListPk, status){
+            $.ajax({
+                url: "{% url 'view_assistence_change' %}",
+                type: "POST",
+                data: {
+                    groupList: groupListPk,
+                    status: status,
+                },
+                success: function (json) {
+                    console.log("O200 > code >");
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(errmsg, err);
+                }
+            });
+        }        
+    </script>
 {% endblock %}

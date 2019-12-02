@@ -188,6 +188,9 @@ class GroupList(models.Model):
     group = models.ForeignKey(GroupInformation, on_delete=models.CASCADE)
     student = models.ForeignKey(Candidate, on_delete=models.CASCADE)
 
+    insistencias = 0
+    tardanzas = 0
+
     def __str__(self):
         return "%s %s" % (self.group.name, self.student)
 
@@ -204,7 +207,7 @@ class GroupList(models.Model):
 class Assistence(models.Model):
     dateTime = models.DateTimeField(blank=True)
     grouplist = models.ForeignKey(GroupList, on_delete=models.CASCADE)
-    status = models.CharField(max_length=2,
+    status = models.CharField(max_length=1,
                                  choices=(("a", "Asistencia"), 
                                           ("i", "Inasistencia"),
                                           ("t", "Tardanza")),
