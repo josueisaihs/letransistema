@@ -1,6 +1,14 @@
 {% extends "base/base.html" %}
 {% block titulo %}Detalle Profesor{% endblock %}
 {% block titulo_seccion %}Detalles{% endblock %}
+{% block menu %}
+    {% include 'base/menu.html' %}
+    <div class="w3-overlay w3-animate-opacity" onclick="w3_close()" id="myOverlay"></div>
+
+    <header class="w3-container w3-top w3-white w3-xlarge w3-padding-16 w3-hide-large w3-hide-medium">
+        <span class="w3-opennav w3-xxlarge" onclick="w3_open()">☰</span>
+    </header>
+{% endblock %}
 {% block seccion %}
         <div class="w3-row-padding">
             <div class="w3-quarter w3-padding">

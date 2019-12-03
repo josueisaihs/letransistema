@@ -1,6 +1,14 @@
 {% extends "base/base.html" %}
 {% block titulo %}Nuevo Curso{% endblock %}
 {% block titulo_seccion %}Nuevo Curso{% endblock %}
+{% block menu %}
+    {% include 'base/menu.html' %}
+    <div class="w3-overlay w3-animate-opacity" onclick="w3_close()" id="myOverlay"></div>
+
+    <header class="w3-container w3-top w3-white w3-xlarge w3-padding-16 w3-hide-large w3-hide-medium">
+        <span class="w3-opennav w3-xxlarge" onclick="w3_open()">☰</span>
+    </header>
+{% endblock %}
 {% block seccion %}
     <form method="post" enctype="multipart/form-data" class="w3-form w3-container w3-animate-right">
         {% csrf_token %}

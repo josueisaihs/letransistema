@@ -28,6 +28,9 @@ urlpatterns = [
     path("selectcourse/<int:pk>", views.selectCourse, name='view_selectcourse'),
     path("listcourses/", views.courseList, name="view_listcourses"),
 
+    # Pruebas
+    path("success/", views.successStudent, name="view_success"),
+
     # Grupos
     path("newgroup/", views.groupInformation, name='view_newgroup'),
 
@@ -47,6 +50,5 @@ urlpatterns = [
     path("grouplist/assistence/<int:pk>", views.assitence, 
     name="view_assistence"),
     path("grouplist/assistence/change", views.assistenceTakeAjax, name="view_assistence_change"),
-    path("grouplist/assistence/check", views.assistenceCheckAjax, name="view_assitence_check")
 ]
 

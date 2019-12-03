@@ -302,6 +302,11 @@ def selectCourse(request, pk):
     return render(request, "docencia/selectcourse.html", locals())
 # <> fin selectCourse
 
+def successStudent(request):
+    student = StudentPersonalInformation.objects.get(pk=2)
+    return render(request, "docencia/successtudent.html", locals())
+# <> fin prueba
+
 
 def courseList(request):
     if request.method == "POST":
@@ -463,25 +468,16 @@ def assitence(request, pk):
     groupList = GroupList.objects.filter(group=pk)
     group = GroupList.objects.get(pk=pk).group
 
+    for i in range(groupList.__len__()):
+        groupList[i].inasistencias = Assistence.objects.filter(
+            grouplist=groupList[i].pk, status="i").__len__()
+
+        groupList[i].tardanzas = Assistence.objects.filter(
+            grouplist=groupList[i].pk, status="t").__len__()
+
     return render(request, "docencia/assistence.html", locals())
 # <> fin assistenceView
 
-@require_POST
-def assistenceCheckAjax(request):
-    groupList = []
-    
-    for group in GroupList.objects.filter(group=request.POST.get("group")):
-        group.inasistencia = GroupList.objects.get(group=request.POST.get("group"), status="i").__len__()
-        groupList.append(group)
-
-    print(groupList)
-
-    response_data = {
-        "groupList": groupList,
-    }
-
-    return JsonResponse(response_data)
-# <> fin assistenceCheckAjax
 
 @require_POST
 def assistenceTakeAjax(request):

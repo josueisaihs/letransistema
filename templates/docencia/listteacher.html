@@ -2,6 +2,14 @@
 {% load static %}
 {% block titulo %}Listado Profesores{% endblock %}
 {% block titulo_seccion %}Profesores{% endblock %}
+{% block menu %}
+    {% include 'base/menu.html' %}
+    <div class="w3-overlay w3-animate-opacity" onclick="w3_close()" id="myOverlay"></div>
+
+    <header class="w3-container w3-top w3-white w3-xlarge w3-padding-16 w3-hide-large w3-hide-medium">
+        <span class="w3-opennav w3-xxlarge" onclick="w3_open()">☰</span>
+    </header>
+{% endblock %}
 {% block seccion %}
     {% if teachers %}
         <h6 class="w3-margin-left"><span class="w3-tag">{{ teachers_total|length }}</span> Profesor{% ifequal teachers_total|length 1 %}{% else %}es{% endifequal %} registrado{% ifequal teachers_total|length 1 %}{% else %}s{% endifequal %} en el Centro</h6>

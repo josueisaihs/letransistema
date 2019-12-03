@@ -188,7 +188,7 @@ class GroupList(models.Model):
     group = models.ForeignKey(GroupInformation, on_delete=models.CASCADE)
     student = models.ForeignKey(Candidate, on_delete=models.CASCADE)
 
-    insistencias = 0
+    inasistencias = 0
     tardanzas = 0
 
     def __str__(self):
