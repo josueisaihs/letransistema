@@ -484,8 +484,16 @@ def assistenceTakeAjax(request):
     groupListPk = request.POST.get("groupList")
     status = request.POST.get("status")
 
-    for assitence in Assistence.objects.filter(grouplist=groupListPk):
+    fecha = datetime.datetime.today()
+    fechaIni = datetime.datetime(fecha.year, fecha.month, fecha.day, 8, 0, 0)
+    fechaFin = datetime.datetime(fecha.year, fecha.month, fecha.day, 18, 59, 59)
+
+    print(fechaIni, fechaFin)
+
+    for assitence in Assistence.objects.filter(grouplist=groupListPk, dateTime__range=(fechaIni, fechaFin)):
+        print("Eliminado")      
         assitence.delete()
+    print("Fin")
 
     assistence = Assistence()
     assistence.grouplist = GroupList.objects.get(pk=groupListPk)
