@@ -61,6 +61,7 @@ if SCREEN:
 
 # print "Version del OpenCv: %s" % (cv2.__version__)
 print "\n\n.:. ElijoSoft"
+print "\n*** ASSIS 1.0 ***\n"
 print "\n\n.:. Presiona q para salir ...\n\n"
 
 scanner = zbar.ImageScanner()
