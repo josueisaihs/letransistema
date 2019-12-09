@@ -466,14 +466,14 @@ def candidateToGroupAjax(request):
 
 def assitence(request, pk):
     groupList = GroupList.objects.filter(group=pk)
-    group = GroupList.objects.get(pk=pk).group
+    group = GroupInformation.objects.get(pk=pk)
 
     for i in range(groupList.__len__()):
         groupList[i].inasistencias = Assistence.objects.filter(
-            grouplist=groupList[i].pk, status="i").__len__()
+            assis_grouplist=groupList[i].pk, assis_status="i").__len__()
 
         groupList[i].tardanzas = Assistence.objects.filter(
-            grouplist=groupList[i].pk, status="t").__len__()
+            assis_grouplist=groupList[i].pk, assis_status="t").__len__()
 
     return render(request, "docencia/assistence.html", locals())
 # <> fin assistenceView
@@ -485,21 +485,22 @@ def assistenceTakeAjax(request):
     status = request.POST.get("status")
 
     fecha = datetime.datetime.today()
-    fechaIni = datetime.datetime(fecha.year, fecha.month, fecha.day, 8, 0, 0)
-    fechaFin = datetime.datetime(fecha.year, fecha.month, fecha.day, 18, 59, 59)
+    fechaIni = datetime.datetime(fecha.year, fecha.month, fecha.day, 0, 0, 0)
+    fechaFin = datetime.datetime(fecha.year, fecha.month, fecha.day, 23, 59, 59)
 
     print(fechaIni, fechaFin)
 
-    for assitence in Assistence.objects.filter(grouplist=groupListPk, dateTime__range=(fechaIni, fechaFin)):
-        print("Eliminado")      
-        assitence.delete()
-    print("Fin")
+    for _assistence_ in Assistence.objects.filter(assis_grouplist=groupListPk, assis_dateTime__range=(fechaIni, fechaFin)):    
+        print("\n\n>> Eliminando Registro de Asistencia " + _assistence_.__str__() + "\n\n")
+        _assistence_.delete()
 
     assistence = Assistence()
-    assistence.grouplist = GroupList.objects.get(pk=groupListPk)
-    assistence.dateTime = datetime.datetime.now()
-    assistence.status = status
+    assistence.assis_grouplist = GroupList.objects.get(pk=groupListPk)
+    assistence.assis_dateTime = datetime.datetime.now()
+    assistence.assis_status = status
     assistence.save()
+
+    print("\n\n>> " + assistence.__str__() + "\n\n")
 
     response_data = {
         "data": "True",
@@ -507,3 +508,86 @@ def assistenceTakeAjax(request):
 
     return JsonResponse(response_data)
 # <> fin assistenceCheckAjax
+
+
+@require_POST
+def assistenceCheckAjax(request):
+    fecha = datetime.datetime.today()
+    fechaIni = datetime.datetime(fecha.year, fecha.month, fecha.day, 0, 0, 0)
+    fechaFin = datetime.datetime(fecha.year, fecha.month, fecha.day, 23, 59, 59)
+
+    groupListSal = []
+    groupList = GroupList.objects.filter(group=request.POST.get('group'))
+
+    for i in range(groupList.__len__()):
+        try:
+            asistencia = Assistence.objects.get(assis_grouplist=groupList[i].pk, assis_dateTime__range=(fechaIni, fechaFin))
+        
+            groupListSal.append(["%s" % groupList[i].pk, asistencia.assis_status])
+        except:
+            groupListSal.append(["%s" % groupList[i].pk, "0"])
+
+    print(groupListSal)
+
+    response_data = {
+        "groupList": groupListSal,
+    }
+
+    return JsonResponse(response_data)    
+# <> fin assistenceCheckAjax
+
+
+@require_POST
+def assistenceStatusAjax(request):
+    groupListPk = request.POST.get('groupListPk')
+    status = request.POST.get('status')
+
+    assistence = []
+    for _assistence_ in Assistence.objects.filter(assis_grouplist=groupListPk, assis_status=status).order_by('-dateTime'):
+        assistence.append(_assistence_.assis_dateTime.strftime('%d/%m/%Y'))
+    
+    response_data = {
+    'groupList': assistence
+    }
+
+    return JsonResponse(response_data)
+# <> fin assistenceStatusAjax
+
+
+def assistenceRasp(request, ci, rasp):
+
+    candidate = Candidate.objects.filter(student__numberidentification=ci)
+    if not candidate:
+        return JsonResponse({'data': 'false'})
+
+    print("\n", candidate, "\n")
+
+    # Buscando el GroupList
+    groupList = GroupList.objects.filter(
+        group=GroupInformation.objects.get(classroom = Raspberrys.objects.get(name=rasp).classroom),
+        student=Candidate.objects.get(student__numberidentification=ci)
+    )
+
+    fecha = datetime.datetime.today()
+    fechaIni = datetime.datetime(fecha.year, fecha.month, fecha.day, 0, 0, 0)
+    fechaFin = datetime.datetime(fecha.year, fecha.month, fecha.day, 23, 59, 59)
+
+    print(fechaIni, fechaFin)
+
+    for _assistence_ in Assistence.objects.filter(assis_grouplist=groupList.pk, assis_dateTime__range=(fechaIni, fechaFin)):    
+        print("\n\n>> Eliminando Registro de Asistencia " + _assistence_.__str__() + "\n\n")
+        _assistence_.delete()
+
+    assistence = Assistence()
+    assistence.assis_dateTime = datetime.datetime.now()
+    assistence.assis_status = "a"
+    assistence.assis_grouplist = groupList
+    print(">>> Asistencia Auto " + assistence.__str__())
+    # assistence.save()
+
+    response_data = {
+    'data': 'ok',
+    }
+
+    return JsonResponse(response_data)
+# <> fin assistenceRasp

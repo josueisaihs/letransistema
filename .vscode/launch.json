@@ -3,9 +3,29 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [   
+    "configurations": [
+
+
         {
-            "name": "Python: Django",
+            "name": "Dj Makemigrations",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+                "makemigrations"
+            ]
+        },
+        {
+            "name": "Dj Migrate",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+                "migrate"
+            ]
+        },
+        {
+            "name": "Dj Launcher",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
@@ -14,6 +34,6 @@
                 "0.0.0.0:8000"
             ],
             "django": true
-        }
+        },
     ]
 }

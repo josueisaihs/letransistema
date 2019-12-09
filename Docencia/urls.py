@@ -50,5 +50,9 @@ urlpatterns = [
     path("grouplist/assistence/<int:pk>", views.assitence, 
     name="view_assistence"),
     path("grouplist/assistence/change", views.assistenceTakeAjax, name="view_assistence_change"),
+    path("grouplist/assistence/check", views.assistenceCheckAjax,
+    name="view_assistence_check"),
+    path('grouplist/assistence/status', views.assistenceStatusAjax, name='view_assistence_status'),
+    path('grouplist/assistence/rasp/<int:ci>/<str:rasp>', views.assistenceRasp, name='view_assistence_rasp'),
 ]
 

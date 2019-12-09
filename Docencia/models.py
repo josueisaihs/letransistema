@@ -190,6 +190,7 @@ class GroupList(models.Model):
 
     inasistencias = 0
     tardanzas = 0
+    asistenciaHoy = False
 
     def __str__(self):
         return "%s %s" % (self.group.name, self.student)
@@ -205,20 +206,27 @@ class GroupList(models.Model):
 
 
 class Assistence(models.Model):
-    dateTime = models.DateTimeField(blank=True)
-    grouplist = models.ForeignKey(GroupList, on_delete=models.CASCADE)
-    status = models.CharField(max_length=1,
-                                 choices=(("a", "Asistencia"), 
-                                          ("i", "Inasistencia"),
-                                          ("t", "Tardanza")),
-                                 default="a")
+    assis_dateTime = models.DateTimeField(blank=True)
+    assis_grouplist = models.ForeignKey(GroupList, on_delete=models.CASCADE)
+    assis_status = models.CharField(
+        max_length=1,
+        choices=(
+            ("a", "Asistencia"), 
+            ("i", "Inasistencia"),
+            ("t", "Tardanza")
+        ),
+        default="a"
+    )
+    assis_mode = models.CharField(max_length=1, choices=(
+        (("m", "Manual"), ("a", "Auto"))
+    ), default="m")
 
     def __str__(self):
-        return "%s %s" % (self.dateTime, self.grouplist.student)
+        return "%s %s %s" % (self.assis_dateTime, self.assis_grouplist.student, self.assis_status)
 
     class Admin(ModelAdmin):
-        fields = ["dateTime", "grouplist", "status"]
-        ordering = ["dateTime"]
+        fields = ["assis_dateTime", "assis_grouplist", "assis_status", "assis_mode"]
+        ordering = ["assis_dateTime"]
         list_display = fields
 # <> fin Assistence
 

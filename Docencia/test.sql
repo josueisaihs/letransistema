@@ -1,0 +1,1 @@
+SELECT id FROM Docencia_studentidentification WHERE 'a' = 'a';

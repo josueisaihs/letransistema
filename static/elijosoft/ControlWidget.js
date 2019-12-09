@@ -554,3 +554,11 @@ var CandidateToGroup = function (nombre, contenedor, urlSelect, coursePk) {
         });
     };
 };
+
+function selectValue(id, value=true) {
+    if (value){
+        return document.getElementById(id).options[document.getElementById(id).selectedIndex].value;
+    }else{
+        return document.getElementById(id).options[document.getElementById(id).selectedIndex].innerText;
+    }
+}
