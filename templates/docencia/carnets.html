@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Carnet</title>
+    <script src="{% static 'jquery/jquery-3.2.0.min.js' %}"></script>
+</head>
+<body style="margin-top: 25px; margin-left: 10px;">
+    <!-- Columna 1-->
+    <div style="position: absolute; margin-top: 10px; z-index: -1; margin-left: 10px; width: 321px;" id="id_columna_1">
+    </div>
+
+    <!-- Columna 2-->
+    <div style="position: absolute; z-index: 1; margin-top: 10px; margin-left: 341px; width: 321px;" id="id_columna_2">
+    </div>
+
+    <script>
+        var col1 = $("#id_columna_1");
+        var col2 = $("#id_columna_2");
+
+        col1.empty();
+        col2.empty();
+
+        {% for student in studentsGroup %}
+            {% if forloop.counter0|divisibleby:"2" %}
+                col1.append("" +
+                    "<div style='width: 321px; height: 208px; border: 1px dashed white;'>" +          
+                        "<img style='position: absolute; z-index: -1;border: 1px dashed gray;'" +
+                        "src=\"{% static 'image/perfil/student/carnet/carnet.png' %}\">" +
+                        "<img src='/{{ student.student.student.qrcode }}' height='101px' style='z-index: 3; position: absolute; margin-left: 204px; margin-top: 93px; !important'>" +
+
+                        '<small style="position: absolute; z-index: 2; margin-left: 40px; font-size: 10px; margin-top: 100px;">Nombre:</small>' +
+
+                        '<p style="position: absolute; z-index: 2; margin-top:120px; margin-left: 40px; font-size: 12px;">{{ student.student.student.name }}<br>{{ student.student.student.lastname }}</p>' +
+
+                        '<small style="position: absolute; z-index: 2; margin-left: 40px; font-size: 10px; margin-top: 160px;">ID:</small>' +
+
+                        '<p style="z-index: 2; margin-top: 180px; margin-left: 40px; font-size: 12px;">{{ student.student.student.numberidentification }}</p>' +
+                    '</div>'
+                );
+            {% else %}
+                col2.append("" +
+                    "<div style='width: 321px; height: 208px; border: 1px dashed white;'>" +          
+                        "<img style='position: absolute; z-index: -1;border: 1px dashed gray;'" +
+                        "src=\"{% static 'image/perfil/student/carnet/carnet.png' %}\">" +
+                        "<img src='/{{ student.student.student.qrcode }}' height='101px' style='z-index: 3; position: absolute; margin-left: 204px; margin-top: 93px; !important'>" +
+
+                        '<small style="position: absolute; z-index: 2; margin-left: 40px; font-size: 10px; margin-top: 100px;">Nombre:</small>' +
+
+                        '<p style="position: absolute; z-index: 2; margin-top:120px; margin-left: 40px; font-size: 12px;">{{ student.student.student.name }}<br>{{ student.student.student.lastname }}</p>' +
+
+                        '<small style="position: absolute; z-index: 2; margin-left: 40px; font-size: 10px; margin-top: 160px;">ID:</small>' +
+
+                        '<p style="z-index: 2; margin-top: 180px; margin-left: 40px; font-size: 12px;">{{ student.student.student.numberidentification }}</p>' +
+                    '</div>'
+                );
+            {% endif %}
+        {% endfor %}
+
+        window.print();
+    </script>
+</body>
+</html>

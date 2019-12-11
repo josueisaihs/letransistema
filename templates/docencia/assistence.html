@@ -7,16 +7,13 @@
         </div>
         <table class="w3-table-all w3-hoverable w3-small" id="id_candidate_table">
             <tr class="w3-row w3-center">
-                <th class="w3-col l3">
+                <th class="w3-col l4">
                     Nombre
                 </th>
-                <th class="w3-col l3">Apellidos
+                <th class="w3-col l4">Apellidos
                 </th>
                 <th class="w3-col l2 w3-center">
                     Inasistencias
-                </th>
-                <th class="w3-col l2 w3-center">
-                    Tardanzas
                 </th>
                 <th class="w3-col l2 w3-center">
                     Asistencia
@@ -25,17 +22,13 @@
             <tbody id="id_table_body">
                 {% for student in  groupList %}
                     <tr>
-                        <td class="w3-col l3">{{ student.student.student.name }}</td>
-                        <td class="w3-col l3">{{ student.student.student.lastname }}</td>
+                        <td class="w3-col l4">{{ student.student.student.name }}</td>
+                        <td class="w3-col l4">{{ student.student.student.lastname }}</td>
                         <td class="w3-col l2 w3-center">
                         <button class="w3-btn w3-red w3-small w3-round" onclick="statusCheck({{ student.pk }}, 'i');">
                             {{ student.inasistencias }}
                             </button>
-                        </td>
-                        <td class="w3-col l2 w3-center">
-                        <button class="w3-btn w3-amber w3-small w3-round" onclick="statusCheck({{ student.pk }}, 't');">{{ student.tardanzas }}
-                        </button>
-                        </td>                        
+                        </td>                       
                         <td class="w3-col l2 w3-center" >
                             <select 
                                 class="w3-select w3-border w3-round es-shadow" 
@@ -72,7 +65,7 @@
             </div>
         </div>
     <script>
-        setTimeout(checkAssistence, 500);
+        setInterval(checkAssistence, 1500);
 
         function statusCheck(groupListPk, status){
             document.getElementById('modal_list').style.display='none';

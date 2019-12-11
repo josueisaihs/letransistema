@@ -17,8 +17,8 @@ urlpatterns = [
     path("delstudent/<int:pk>/", views.studentDelete, name='view_delstudent'),
     path("editstudent/<int:pk>/", views.studentEdit, name='view_editstudent'),
     path("liststudent/", views.studentList, name='view_liststudent'),
-    path("carnetstudents/", views.studentsCarnetAjax, name='view_studentsCarnetAjax'),
     path("carnetstudent/<int:pk>", views.studentCarnet, name='view_studentCarnet'),
+    path("carnetsstudents/<int:pk>", views.studentsCarnets, name='view_studentsCarnets'),
 
     # Cursos
     path("newcourse/", views.courseInformation, name='view_newcourse'),
@@ -53,6 +53,5 @@ urlpatterns = [
     path("grouplist/assistence/check", views.assistenceCheckAjax,
     name="view_assistence_check"),
     path('grouplist/assistence/status', views.assistenceStatusAjax, name='view_assistence_status'),
-    path('grouplist/assistence/rasp/<int:ci>/<str:rasp>', views.assistenceRasp, name='view_assistence_rasp'),
 ]
 

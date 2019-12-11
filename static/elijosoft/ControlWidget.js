@@ -523,7 +523,7 @@ var CandidateToGroup = function (nombre, contenedor, urlSelect, coursePk) {
             "<tr class=\"w3-row\">" +
             "    <td class=\"w3-half\">" + candidate.name + " " + candidate.lastname +
             "    </td>" +
-            "    <td class=\"w3-quarter\"><a role='button' class='w3-text-black' href='" + candidate.urlCarnet + "'><i class='fa fa-address-card'></i></a></td>" +
+            "    <td class=\"w3-quarter\"><a target='_blank' role='button' class='w3-text-black' href='" + candidate.urlCarnet + "'><i class='fa fa-address-card'></i></a></td>" +
             "    <td class=\"w3-quarter\">\n" +
             "        <select onchange=\"" + nombre + ".selectGroup(" + candidate.pk + ", this.options[this.selectedIndex].value)\"" +
             "                class=\"w3-select w3-border w3-validate w3-round es-shadow\">" +

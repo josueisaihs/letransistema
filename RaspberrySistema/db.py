@@ -1,5 +1,6 @@
 import sqlite3 as sql
 import MySQLdb as mysql
+from datetime import datetime
 
 
 class DateBase:
@@ -52,6 +53,8 @@ class DateBase:
     def insertAsistence(self, glId):
         print "=> Insertando ..."
 
+        self.checkAsistence(glId)
+
         self.cursor.execute(
             '''
             INSERT INTO Docencia_assistence(assis_dateTime, assis_grouplist_id, assis_status, assis_mode) VALUES (now(), %s, 'a', 'a');
@@ -61,6 +64,19 @@ class DateBase:
         self.commit()
 
         return self.cursor.lastrowid != 0
+
+    def checkAsistence(self, glId):
+        fecha = datetime.today()
+        fechaIni = datetime(fecha.year, fecha.month, fecha.day, 0, 0, 0)
+        fechaFin = datetime(fecha.year, fecha.month, fecha.day, 23, 59, 59)
+
+        self.cursor.execute(
+            '''
+            DELETE FROM Docencia_assistence WHERE assis_dateTime >= "%s" AND assis_dateTime <= "%s" AND assis_grouplist_id = %s
+            ''' % (fechaIni, fechaFin, glId)
+        )
+
+        self.commit()
     
     def close(self):
 		self.cursor.close()

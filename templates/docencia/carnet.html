@@ -4,32 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Carnet</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'w3/w3.css' %}">
 </head>
 <body style="margin-top: 25px; margin-left: 10px;">
-    <div style="width: 321px; height: 208px; border: 1px dashed gray;">
-        <h5 style="margin: 10px; margin-top: 5px; text-align: center;">Centro Fray Bartolome de las Casas</h5>
-        <div style="margin-left: 10px; margin-top: 10px; width: 100px; height: 100px;min-width: 100px; min-height: 100px;">
-            <img src="{% static 'image/cfbc.png' %}" height="100px">
-        </div>
-        <div style="margin-left: 200px; margin-top: -100px; width: 100px; height: 100px;min-width: 100px; min-height: 100px;">
-            <img src="/{{ student.qrcode }}" height="100px">
-        </div>
-        <div style="margin-top: 5px; text-align: center;">
-            <h6><b>{{ student.name }} {{ student.lastname }}</b><br><small><i class="fa fa-user"></i> Estudiante</small></h6>
-        </div>
-    </div>
-    <div style="width: 321px; height: 208px; border: 1px dashed gray;">
-        <h5 style="margin: 10px; margin-top: 5px; text-align: center;">Centro Fray Bartolome de las Casas</h5>
-        <div style="margin-left: 10px; margin-top: 10px; width: 100px; height: 100px;min-width: 100px; min-height: 100px;">
-            <img src="{% static 'image/cfbc.png' %}" height="100px">
-        </div>
-        <div style="margin-left: 200px; margin-top: -100px; width: 100px; height: 100px;min-width: 100px; min-height: 100px;">
-            <img src="/{{ student.qrcode }}" height="100px">
-        </div>
-        <div style="margin-top: 5px; text-align: center;">
-            <h6><b>{{ student.name }} {{ student.lastname }}</b><br><small><i class="fa fa-user"></i> Estudiante</small></h6>
-        </div>
+    <div style="margin-top: 10px; margin-left: 10px;">
+        <div style="width: 321px; height: 208px; border: 1px dashed white;">            
+            <img style="position: absolute; z-index: -1;border: 1px dashed gray;" 
+            src="{% static 'image/perfil/student/carnet/carnet.png' %}">
+
+            <img src="/{{ student.qrcode }}" height="101px" style="z-index: 3; position: absolute; margin-left: 204px; margin-top: 93px; !important">
+
+            <small style="position: absolute; z-index: 2; margin-left: 40px; font-size: 10px; margin-top: 100px;">Nombre:</small>
+
+            <p style="position: absolute; z-index: 2; margin-top:120px; margin-left: 40px; font-size: 12px;">{{ student.name }}<br>{{ student.lastname }}</p>
+
+            <small style="position: absolute; z-index: 2; margin-left: 40px; font-size: 10px; margin-top: 160px;">ID:</small>
+
+            <p style="z-index: 2; margin-top: 180px; margin-left: 40px; font-size: 12px;">{{ student.numberidentification }}</p>
+        </div>        
     </div>
 </body>
 </html>

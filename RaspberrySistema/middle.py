@@ -1,7 +1,6 @@
-from db import DateBase
+from db import DateBase, datetime
 from datetime import timedelta
 from time import sleep
-from datetime import datetime
 
 print "**** Middle Version 2.1 ****"
 
@@ -51,28 +50,28 @@ class Analisis:
 	def run(self):
 		qr = self.stock.getQr()
 		print ' ** Qr: %s ** ' % qr
-		try:
-			self.insertarAsistencia = DateBase()
+		#try:
+		self.insertarAsistencia = DateBase()
 
-			if qr:
-				return self.tomarAsistencia(qr)
-			else:
-				return False
-		except:
-			print ".:. No se encuentra conectado, no se pudo subir a %s" % qr
+		if qr:
+			return self.tomarAsistencia(qr)
+		else:
 			return False
+		#except:
+		#	print ".:. No se encuentra conectado, no se pudo subir a %s" % qr
+		#	return False
 
 	def tomarAsistencia(self, qr):
-		try:
-			print '.:. Insertado lectura: {}'.format(qr)
-			for glId in self.insertarAsistencia.queryGroupList(qr, self.raspberryName):
-				return self.insertarAsistencia.insertAsistence(glId[0])
-			
-			print ".:. No se agrego la asistencia %s" % qr
-			return False
-		except:
-			print "=> No se encuentra conectado (ERROR)"
-			return False
+		#try:
+		print '.:. Insertado lectura: {}'.format(qr)
+		for glId in self.insertarAsistencia.queryGroupList(qr, self.raspberryName):
+			return self.insertarAsistencia.insertAsistence(glId[0])
+		
+		print ".:. No se agrego la asistencia %s" % qr
+		return False
+		#except:
+		#	print "=> No se encuentra conectado (ERROR)"
+		#	return False
 
 	def addStock(self, qr):
 		print "=> Recibiendo Lectura: %s" % qr

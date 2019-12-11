@@ -1,0 +1,1 @@
+sudo python /home/pi/ElijoSoft/ControlAsistencia/app.py Rasp1 LOCAL False NOT_SCREEN
