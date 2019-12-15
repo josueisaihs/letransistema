@@ -25,7 +25,7 @@ SECRET_KEY = 'in4ok-y*v=r9%03*rq$fbuul8z18va6y_ks(j7vx*6g(_zh2)s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-REMOTA = True
+REMOTA = False
 
 ALLOWED_HOSTS = [
     u'192.168.0.111'
@@ -115,7 +115,7 @@ elif platform.system() == "Linux":
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': os.path.join(BASE_DIR, 'db', 'dataBaseLetran.db'),
+                'NAME': os.path.join(BASE_DIR, 'db', 'dataBaseLetranLinux.db'),
             }
         }
 
@@ -142,7 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'es-cu'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -150,7 +150,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

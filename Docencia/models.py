@@ -85,8 +85,6 @@ class StudentPersonalInformation(models.Model):
                                           ("tp", "Trabajador Privado"), ("do", "Desocupado"), ("es", "Estudiante")),
                                  default="do")
 
-    qrcode = models.FileField(upload_to=os.path.join('static', 'image', 'perfil', 'student', 'qrcode'), null=True, blank=True)
-
     def __str__(self):
         return "%s %s" % (self.name, self.lastname)
 
@@ -95,7 +93,8 @@ class StudentPersonalInformation(models.Model):
 
     class Admin(ModelAdmin):
         fields = ["name", "lastname", "gender", "numberidentification", "street", "city", "state", "cellphone", "phone",
-                  "email", "image", "nacionality", "ocupation", "qrcode"]
+                  "email", "image", "nacionality", "ocupation",
+        ]
         ordering = ["numberidentification", "lastname", "name"]
         search_fields = fields
         list_display = fields

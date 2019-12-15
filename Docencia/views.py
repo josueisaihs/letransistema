@@ -1,15 +1,15 @@
-import datetime
+import datetime, os
+from io import BytesIO
 
 from django.http import JsonResponse
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator, UnorderedObjectListWarning
 from django.core import serializers
 from django.db.models import Q
 from django.views.decorators.http import require_POST
 
 from .forms import *
-
-from .carnetgenerador import QR
+from .carnetGen import CreadorCarnetPDF
 
 def indexEnrollment(request):
     step_2_active = "w3-text-gray w3-bottombar w3-border-gray"
@@ -28,6 +28,23 @@ def indexEnrollment(request):
                 error = True
     else:
         studentCandidateForm = StudentCandidateForm()
+
+    
+    
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.path.join(BASE_DIR, 'carnet', 'listacursodw.csv'), 'r', encoding='ISO-8859-3') as file:
+        leer = True
+        while leer:
+            try:
+                student = StudentPersonalInformation()
+
+                student.name, student.lastname, student.numberidentification = file.readline().split(",")
+
+                student.save()
+            except:
+                leer = not leer
+
+        file.close()
 
     return render(request, "docencia/matriculaIndex.html",  locals())
 # <> indexStudent
@@ -121,11 +138,6 @@ def studentPersonalInformation(request):
             student = StudentPersonalInformation.objects.get(name=nombre, lastname=apellido, numberidentification=ci)
             pk = student.pk
 
-            # Generar Codigo QR por estudiante
-            qrcode = QR(ci)
-            student.qrcode = qrcode.generar()
-            student.save()
-
             return HttpResponseRedirect('/docencia/selectcourse/%s' % pk)
     else:
         studentPersonalInformationForm = StudentPersonalInformationForm()
@@ -166,29 +178,39 @@ def studentList(request):
 
 def studentCarnet(request, pk):
     student = StudentPersonalInformation.objects.get(pk=pk)
-    pk = student.pk
-    if student.qrcode == "":
-        # Generar Codigo QR por estudiante
-        print("\nCreando Nuevo carnet\n")
-        qrcode = QR(student.numberidentification)
-        student.qrcode = qrcode.generar()
-        student.save()
+    response = HttpResponse(content_type='application/pdf')
+    
+    pdf = CreadorCarnetPDF()
+    pdf.lista.append((student.name, student.lastname, student.numberidentification))
+    pdfPrint = pdf.generar()
+    pdf.buffer.close()
 
-        student = StudentPersonalInformation.objects.get(pk=pk)
+    response.write(pdfPrint)
 
-    return render(request, "docencia/carnet.html", locals())
+    return response
 # <> fin studentCarnet
 
 
 def studentsCarnets(request, pk):
     groups = GroupInformation.objects.filter(course=pk, current=True)
 
+    response = HttpResponse(content_type='application/pdf')
+    
+    pdf = CreadorCarnetPDF()
+
     studentsGroup = []
+    studentList = []
     for groupActive in groups:
         for student in GroupList.objects.filter(group=groupActive.pk):
             studentsGroup.append(student)
+            pdf.lista.append((student.student.student.name, student.student.student.lastname, student.student.student.numberidentification))
 
-    return render(request, "docencia/carnets.html", locals())
+    pdfPrint = pdf.generar()
+    pdf.buffer.close()
+
+    response.write(pdfPrint)
+
+    return response
 # <> fin studentsCarnets
 
 
@@ -211,14 +233,6 @@ def studentEdit(request, pk):
             ci = studentPersonalInformationForm.cleaned_data["numberidentification"]
 
             studentPersonalInformationForm.save()
-
-            # Generar Codigo QR por estudiante
-            student = StudentPersonalInformation.objects.get(name=nombre,
-                                                             lastname=apellido,
-                                                             numberidentification=ci)
-            qrcode = QR(ci)
-            student.qrcode = qrcode.generar()
-            student.save()
 
             return HttpResponseRedirect('/docencia/liststudent/')
     else:
@@ -305,6 +319,7 @@ def selectCourse(request, pk):
     return render(request, "docencia/selectcourse.html", locals())
 # <> fin selectCourse
 
+
 def successStudent(request):
     student = StudentPersonalInformation.objects.get(pk=2)
     return render(request, "docencia/successtudent.html", locals())
@@ -349,7 +364,6 @@ def courseList(request):
 
 
 def candidateList(request, pk):
-
     course_name = CourseInformation.objects.get(pk=pk).name
 
     candidates = Candidate.objects.filter(course=pk)
