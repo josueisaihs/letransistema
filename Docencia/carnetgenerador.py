@@ -7,7 +7,6 @@ from io import BytesIO
 from random import randint
 from hashlib import blake2s
 
-
 class QR:
     def __init__(self, codigo):
         self.codigo = codigo

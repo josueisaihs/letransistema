@@ -25,7 +25,7 @@ SECRET_KEY = 'in4ok-y*v=r9%03*rq$fbuul8z18va6y_ks(j7vx*6g(_zh2)s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-REMOTA = False
+REMOTA = True
 
 ALLOWED_HOSTS = [
     u'192.168.0.111'

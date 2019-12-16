@@ -1,5 +1,7 @@
 import datetime, os
-from io import BytesIO
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
@@ -9,7 +11,10 @@ from django.db.models import Q
 from django.views.decorators.http import require_POST
 
 from .forms import *
-from .carnetGen import CreadorCarnetPDF
+from .carnetgenerador import QR, BytesIO
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def indexEnrollment(request):
     step_2_active = "w3-text-gray w3-bottombar w3-border-gray"
@@ -178,38 +183,118 @@ def studentList(request):
 
 def studentCarnet(request, pk):
     student = StudentPersonalInformation.objects.get(pk=pk)
+
     response = HttpResponse(content_type='application/pdf')
     
-    pdf = CreadorCarnetPDF()
-    pdf.lista.append((student.name, student.lastname, student.numberidentification))
-    pdfPrint = pdf.generar()
-    pdf.buffer.close()
+    buffer = BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=letter)
+    pdf.setTitle("Carnet Estudiante | %s" % student.name)
 
-    response.write(pdfPrint)
+    pc = .75
+    w = 321 * pc
+    h = 208 * pc
 
+    dim = {
+        0: (25, 600), 1: (25, 434), 2: (25, 268), 3: (25, 102),
+        4: (286, 600), 5: (286, 434), 6: (286, 268), 7: (286, 102),
+    }
+
+    lista = ((student.name, student.lastname, student.numberidentification),)
+
+    countpag = 1
+    count = 0
+    for student in lista:
+        index = count % 8
+        x, y = dim[index]
+        if index == 0 and count > 6:       
+            pdf.showPage()
+            countpag += 1
+        pdf.rect(x, y, w, h)
+        pdf.drawImage(BASE_DIR + '/static/carnets/%s' % "carnet.png", x, y, width=w, height=h)
+        qr = QR(student[2])
+            
+        pdf.drawImage(qr.generar(), x + 150, y + 10, width=80, height=80)
+
+        qr.delete()
+        
+        pdf.setFontSize(8)
+        pdf.setFontSize(10)
+        pdf.drawString(x + 20, y + 80, "Nombre:")
+        pdf.drawString(x + 25, y + 65, student[0])
+        pdf.drawString(x + 25, y + 50, student[1])
+        pdf.setFontSize(8)
+        pdf.drawString(x + 20, y + 30, "ID:")
+        pdf.setFontSize(10)
+        pdf.drawString(x + 25, y + 15, student[2])
+        
+        count += 1
+
+    pdf.showPage()
+    pdf.save()
+    response.write(buffer.getvalue())
+    buffer.close()
+    
     return response
 # <> fin studentCarnet
 
 
 def studentsCarnets(request, pk):
+    courseName = CourseInformation.objects.get(pk=pk).name
     groups = GroupInformation.objects.filter(course=pk, current=True)
 
     response = HttpResponse(content_type='application/pdf')
-    
-    pdf = CreadorCarnetPDF()
 
-    studentsGroup = []
-    studentList = []
+    buffer = BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=letter)
+    pdf.setTitle("Carnets Grupo | %s" % courseName)
+
+    pc = .75
+    w = 321 * pc
+    h = 208 * pc
+
+    dim = {
+        0: (25, 600), 1: (25, 434), 2: (25, 268), 3: (25, 102),
+        4: (286, 600), 5: (286, 434), 6: (286, 268), 7: (286, 102),
+    }
+    
+    lista = []
     for groupActive in groups:
         for student in GroupList.objects.filter(group=groupActive.pk):
-            studentsGroup.append(student)
-            pdf.lista.append((student.student.student.name, student.student.student.lastname, student.student.student.numberidentification))
+            lista.append((student.student.student.name, student.student.student.lastname, student.student.student.numberidentification))
 
-    pdfPrint = pdf.generar()
-    pdf.buffer.close()
+    countpag = 1
+    count = 0
+    for student in lista:
+        index = count % 8
+        x, y = dim[index]
+        if index == 0 and count > 6:       
+            pdf.showPage()
+            countpag += 1
+        pdf.rect(x, y, w, h)
+        pdf.drawImage(BASE_DIR + '/static/carnets/%s' % "carnet.png", x, y, width=w, height=h)
+        qr = QR(student[2])
+            
+        pdf.drawImage(qr.generar(), x + 150, y + 10, width=80, height=80)
 
-    response.write(pdfPrint)
+        qr.delete()
+        
+        pdf.setFontSize(8)
+        pdf.setFontSize(10)
+        pdf.drawString(x + 20, y + 80, "Nombre:")
+        pdf.drawString(x + 25, y + 65, student[0])
+        pdf.drawString(x + 25, y + 50, student[1])
+        pdf.setFontSize(8)
+        pdf.drawString(x + 20, y + 30, "ID:")
+        pdf.setFontSize(10)
+        pdf.drawString(x + 25, y + 15, student[2])
+        
+        count += 1
 
+    pdf.showPage()
+    pdf.save()
+    response.write(buffer.getvalue())
+    buffer.close()
+    
     return response
 # <> fin studentsCarnets
 
