@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+
+
 __author__ = "Josue Isai Hernandez Sanchez"
 __email__ = "josueisaihs@gmail.com"
 
@@ -11,6 +13,7 @@ urlpatterns = [
     path("listteacher/", views.teacherList, name='view_listteacher'),
     path("editteacher/<int:pk>/", views.teacherEdit, name='view_editteacher'),
     path("delteacher/<int:pk>/", views.teacherDelete, name='view_delteacher'),
+    path('userhome/', views.userhome, name="view_userhome"),
 
     # Estudiantes
     path("newstudent/", views.studentPersonalInformation, name='view_newstudent'),

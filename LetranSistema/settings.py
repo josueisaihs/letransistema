@@ -28,11 +28,12 @@ DEBUG = True
 REMOTA = True
 
 ALLOWED_HOSTS = [
-    u'192.168.0.111'
-    u'192.168.0.110'
-    u'192.168.0.109'
-    u'192.168.0.108'
-    u'192.168.0.107'
+    u'192.168.0.112',
+    u'192.168.0.111',
+    u'192.168.0.110',
+    u'192.168.0.109',
+    u'192.168.0.108',
+    u'192.168.0.107',
     u'192.168.0.106', 
     u'192.168.0.105', 
     u'192.168.0.104',
@@ -150,7 +151,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -160,3 +161,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     'static',
 )
+
+LOGIN_REDIRECT_URL = '/docencia/userhome/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

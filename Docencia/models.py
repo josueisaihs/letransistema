@@ -2,9 +2,12 @@ import datetime, os
 
 from django.db import models
 from django.contrib.admin import ModelAdmin
+from django.contrib.auth.models import User
 
 
 class TeacherPersonalInformation(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=2)
+
     name = models.CharField(max_length=50)
     lastname = models.CharField(max_length=50)
 
@@ -42,11 +45,44 @@ class TeacherPersonalInformation(models.Model):
         unique_together = [('name', 'lastname', 'numberidentification')]
 
     class Admin(ModelAdmin):
-        fields = ["name", "lastname", "gender", "numberidentification", "street", "city", "state", "cellphone", "phone",
+        fields = ["user", "name", "lastname", "gender", "numberidentification", "street", "city", "state", "cellphone", "phone",
                   "email", "image", "nacionality", "pasaport"]
         ordering = ["numberidentification", "lastname", "name"]
         search_fields = fields
         list_display = fields
+
+    def eliminarTildes(self, txt):
+        w = (
+            ("á", "a"), 
+            ("é", "e"), 
+            ("í", "i"), 
+            ("ó", "o"), 
+            ("ú", "u"),
+            ("ñ", "n")
+        )
+        for x, y in w:
+            txt = txt.replace(x, y)
+        return txt        
+
+    def createUser(self):
+        username = self.eliminarTildes(self.name.lower()[:1] + self.lastname.lower().replace(" ", ""))
+
+        password = self.eliminarTildes("@_" + self.numberidentification + "_" + self.name.lower()[:1] + self.lastname.lower()[:1])
+
+        user = User.objects.create_user(
+            username, 
+            password=password,
+            first_name=self.name,
+            last_name=self.lastname
+        )
+        user.save()
+
+        user = User.objects.get(
+            username=username, 
+            first_name=self.name, 
+            last_name=self.lastname
+        )
+        return user
 # <> fin TeacherPersonalInformation
 
 

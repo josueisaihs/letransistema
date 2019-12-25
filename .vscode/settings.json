@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "${workspaceFolder}/db/dataBaseLetran.db",
+            "dialect": "SQLite",
+            "name": "Base"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

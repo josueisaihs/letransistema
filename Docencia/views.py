@@ -9,6 +9,7 @@ from django.core.paginator import Paginator, UnorderedObjectListWarning
 from django.core import serializers
 from django.db.models import Q
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 from .forms import *
 from .carnetgenerador import QR, BytesIO
@@ -59,7 +60,14 @@ def teacherPersonalInformation(request):
     if request.method == 'POST':
         teacherPersonalInformationForm = TeacherPersonalInformationForm(request.POST, request.FILES)
         if teacherPersonalInformationForm.is_valid():
+            ci = teacherPersonalInformationForm.cleaned_data["numberidentification"]
             teacherPersonalInformationForm.save()
+
+            teacher = TeacherPersonalInformation.objects.get(numberidentification=ci)
+            print(teacher)
+            teacher.user = teacher.createUser()
+            print(teacher)
+            teacher.save()
 
             return HttpResponseRedirect('/docencia/listteacher/')
     else:
@@ -522,7 +530,7 @@ def manyCandidateAjax(request):
     return JsonResponse(response_data)
 # <> fin selectedCandidateAjax
 
-
+@login_required(login_url="/accounts/login/") 
 def candidateToGroup(request, pk):
     course = CourseInformation.objects.get(pk=pk)
 
@@ -649,3 +657,11 @@ def assistenceStatusAjax(request):
 
     return JsonResponse(response_data)
 # <> fin assistenceStatusAjax
+
+
+def userhome(request):
+    groups = GroupInformation.objects.filter(teacher__user=request.user.pk, current=True)
+
+    # course = CourseInformation.objects.get(pk = groups[0].course.pk)
+    return render(request, "docencia/eclipse/index.html", locals())
+# <> fin userhome
