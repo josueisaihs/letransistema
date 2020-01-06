@@ -17,13 +17,14 @@
   <meta charset="UTF-8" />
   <!-- Site Title -->
   <title>CFBC</title>
-
+  <script src="{% static 'jquery/jquery-3.2.0.min.js' %}"></script>
   <link href="https://fonts.googleapis.com/css?family=Playfair+Display:900|Roboto:400,400i,500,700" rel="stylesheet" />
   <!--
       CSS
       =============================================
     -->
   <link rel="stylesheet" type="text/css" href="{% static 'w3/w3.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'elijosoft/elijosoft.css' %}">
   <link rel="stylesheet" href="{% static 'eclipse/css/linearicons.css' %}" />
   <link rel="stylesheet" href="{% static 'eclipse/css/font-awesome.min.css' %}" />
   <link rel="stylesheet" href="{% static 'eclipse/css/bootstrap.css' %}" />
@@ -50,7 +51,7 @@
 
         <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
           <ul class="navbar-nav">
-            <li><a href="#">Inicio</a></li>
+            <li><a href="{% url 'view_index' %}">Inicio</a></li>
             <li><a href="#">Acerca de nosotros</a></li>
             <!-- Dropdown -->
             <li class="dropdown">
@@ -73,8 +74,11 @@
               </div>
             </li>
             <li><a href="#">Contacto</a></li>
-            <li><a role="button" href="{% url 'login' %}">Iniciar Session</a></li>
-
+            {% if user.is_authenticated %}
+              <li><a role="button" href="{% url 'login' %}">Cerrar Session</a></li>
+            {% else %}
+              <li><a role="button" href="{% url 'login' %}">Iniciar Session</a></li>
+            {% endif %}
             <li>
               <button class="search">
                 <span class="lnr lnr-magnifier" id="search"></span>
@@ -109,7 +113,10 @@
           </p>
         </div>
         <div class="offset-lg-2 col-lg-5 col-md-12 home-banner-right">
-          <img class="img-fluid" src="{% static 'eclipse/img/header-img.png' %}" alt="" />
+          {% comment %} <img class="img-fluid" src="{% static 'eclipse/img/header-img.png' %}" alt="" /> {% endcomment %}
+          <video class="img-fluid w3-round-jumbo es-shadow" loop id="promocion-video">
+            <source src="{% static 'video/CFBC.mp4' %}" type="video/mp4">
+          </video>
         </div>
       </div>
     </div>
@@ -746,6 +753,14 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   <script src="{% static 'eclipse/js/waypoints.min.js' %}"></script>
   <script src="{% static 'eclipse/js/jquery.nice-select.min.js' %}"></script>
   <script src="{% static 'eclipse/js/main.js' %}"></script>
+  <script>
+    $("#promocion-video").hide();
+    $(document).ready(function(){      
+      $("#promocion-video").fadeIn(1000);
+      document.getElementById("promocion-video").volume = 0;
+      document.getElementById("promocion-video").play();
+    });
+  </script>
 </body>
 
 </html>

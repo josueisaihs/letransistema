@@ -7,13 +7,16 @@ __author__ = "Josue Isai Hernandez Sanchez"
 __email__ = "josueisaihs@gmail.com"
 
 urlpatterns = [
+    # Pagina Principal
+    path('index/', views.userhome, name="view_index"),
+
     # Profesores
     path("newteacher/", views.teacherPersonalInformation, name='view_newteacher'),
     path("detailteacher/<int:pk>/", views.teacherDetail, name='view_detailteacher'),
     path("listteacher/", views.teacherList, name='view_listteacher'),
     path("editteacher/<int:pk>/", views.teacherEdit, name='view_editteacher'),
     path("delteacher/<int:pk>/", views.teacherDelete, name='view_delteacher'),
-    path('userhome/', views.userhome, name="view_userhome"),
+    
 
     # Estudiantes
     path("newstudent/", views.studentPersonalInformation, name='view_newstudent'),
@@ -40,7 +43,7 @@ urlpatterns = [
     # Matricula
     path("enrollment/", views.indexEnrollment, name='view_enrollment'),
 
-    #     Candidatos Control
+    # Candidatos Control
     path("candidate/<int:pk>", views.candidateList, name='view_candidates'),
     path("candidate/interview", views.interviewCandidateAjax, name='view_candidate_interview'),
     path("candidate/recomended", views.recomendedCandidateAjax, name='view_candidate_recomended'),

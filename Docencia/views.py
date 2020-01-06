@@ -105,7 +105,7 @@ def teacherList(request):
 # <> fin teacherList
 
 
-def teacherDelete(request, pk):
+def teacherDelete(request, pk:int):
     teacher = TeacherPersonalInformation.objects.get(pk=pk)
     teacher.delete()
 
@@ -113,7 +113,7 @@ def teacherDelete(request, pk):
 # <> fin teacherDelete
 
 
-def teacherEdit(request, pk):
+def teacherEdit(request, pk:int):
     teacher = TeacherPersonalInformation.objects.get(pk=pk)
     if request.method == 'POST':
         teacherPersonalInformationForm = TeacherPersonalInformationForm(request.POST, request.FILES, instance=teacher)
@@ -128,7 +128,7 @@ def teacherEdit(request, pk):
 # <> fin teacherEdit
 
 
-def teacherDetail(request, pk):
+def teacherDetail(request, pk:int):
     teacher = TeacherPersonalInformation.objects.get(pk=pk)
 
     return render(request, "docencia/detailteacher.html", locals())
@@ -189,7 +189,7 @@ def studentList(request):
 # <> fin studentList
 
 
-def studentCarnet(request, pk):
+def studentCarnet(request, pk:int):
     student = StudentPersonalInformation.objects.get(pk=pk)
 
     response = HttpResponse(content_type='application/pdf')
@@ -246,7 +246,7 @@ def studentCarnet(request, pk):
 # <> fin studentCarnet
 
 
-def studentsCarnets(request, pk):
+def studentsCarnets(request, pk:int):
     courseName = CourseInformation.objects.get(pk=pk).name
     groups = GroupInformation.objects.filter(course=pk, current=True)
 
@@ -307,7 +307,7 @@ def studentsCarnets(request, pk):
 # <> fin studentsCarnets
 
 
-def studentDelete(request, pk):
+def studentDelete(request, pk:int):
     student = StudentPersonalInformation.objects.get(pk=pk)
     student.delete()
 
@@ -315,7 +315,7 @@ def studentDelete(request, pk):
 # <> fin studentDelete
 
 
-def studentEdit(request, pk):
+def studentEdit(request, pk:int):
     if request.method == 'POST':
         studentPersonalInformationForm = StudentPersonalInformationForm(request.POST,
                                                                         request.FILES,
@@ -350,7 +350,7 @@ def courseInformation(request):
 # <> fin courseInformation
 
 
-def courseDelete(request, pk):
+def courseDelete(request, pk:int):
     course = CourseInformation.objects.get(pk=pk)
     course.delete()
 
@@ -530,6 +530,7 @@ def manyCandidateAjax(request):
     return JsonResponse(response_data)
 # <> fin selectedCandidateAjax
 
+
 @login_required(login_url="/accounts/login/") 
 def candidateToGroup(request, pk):
     course = CourseInformation.objects.get(pk=pk)
@@ -574,6 +575,7 @@ def candidateToGroupAjax(request):
 # <> fin candidateToGroupSelect
 
 
+@login_required(login_url="/accounts/login/") 
 def assitence(request, pk):
     groupList = GroupList.objects.filter(group=pk)
     group = GroupInformation.objects.get(pk=pk)
